@@ -1,6 +1,5 @@
 import productService from "../services/productService.js";
 
-
 const createProduct = async (req, res)=>{
 
     try {
@@ -26,7 +25,56 @@ const createProduct = async (req, res)=>{
     }
 };
 
+const getAllProducts = async (req, res) => {
 
-export { createProduct };
+try {
+    const data = await  productService.getAllProducts();
+    
+    res.status(200).json({
+        message: "All products fetched successfully",
+        data
+    });
+    
+} catch (error) {
+    console.log(error.message);
+    res.status(400).send("Error occurred while fetching products");
+}
+
+};
+
+const getProductById = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const data = await productService.getProductById(id);
+        res.status(200).json({
+            message: "Product fetched successfully",
+            data
+        });
+        
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send("Error occurred while fetching product");
+    }
+    };
+
+const deleteProductById = async (req,res) => { 
+    try {
+        const id = req.params.id;
+        const data = await productService.deleteProductById(id);
+    
+        res.status(200).json({
+            message: "Product deleted successfully",
+            data
+        });
+        
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send("Error occurred while deleting product");
+    }
+
+
+}
+export { createProduct, getAllProducts, getProductById, deleteProductById };
 
 
