@@ -75,6 +75,24 @@ const deleteProductById = async (req,res) => {
 
 
 }
+
+const updateProductById = async (req,res) => {
+
+    try {
+        const productId = req.params.id;
+        const product = req.body;
+        
+        const data = await productService.updateProductById(product, productId);
+        res.status(200).json({
+            message: "Product updated successfully",
+            data
+        });
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send("Error occurred while updating product");
+    }
+
+}
 export { createProduct, getAllProducts, getProductById, deleteProductById };
 
 

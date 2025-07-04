@@ -1,7 +1,5 @@
 import mongoose, { mongo } from "mongoose";
 
-
-
 const productSchema = new mongoose.Schema({
     productName: {
         type: String,
@@ -21,6 +19,19 @@ const productSchema = new mongoose.Schema({
     rom : {
         type: String
     },
+    processor: {
+        type: String
+    },
+    gen: {
+        type: Number
+    },
+    brand: {
+        type: String
+    },
+    use: {
+        type: String,
+        enum: ['Gaming', 'Office', 'Personal', 'Student'],
+    },  
     stock: {
         type: Number,
         deafult: 0
