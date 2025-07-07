@@ -17,6 +17,8 @@ const getAllProducts = async (query = {}) => {
    
     console.log(filters)
 
+    const sort = 
+
     console.log(query.brands.split(','))
     console.log(query.ram.split(',').map(n=>parseInt(n)))
     return filters

@@ -3,6 +3,8 @@ import express from 'express';
 import connectDb from './cofig/db.js';
 import userRoute from './routes/userRoute.js';
 import productRoutes from './routes/productRoutes.js';
+import authRoutes from './routes/authRoute.js';
+
 
 configDotenv();
 const app =  express();
@@ -19,7 +21,8 @@ app.get('/',(req,res)=>{
 
 
 app.use('/api/user',userRoute )
-app.use("/api/product", productRoutes)
+app.use("/api/product",productRoutes)
+app.use("/api/auth",authRoutes)
 
 
 
