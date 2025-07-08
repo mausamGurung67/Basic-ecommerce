@@ -9,7 +9,7 @@ const getAllProducts = async (query = {}) => {
 
     const filters = {}
     if(query.brands) {filters.brand = {$in :query.brands.split(',')} }
-    if(query.ram) {filters.ram = {$in :query.ram.split(',').map(n=>parseInt(n))} } //so yo chai one line ko lagi ho 
+    if(query.ram) {filters.ram = {$in :query.ram.split(',').map(n=>parseInt(n))} } //so yo chai one line wala ho parse gareko  
     if(query.rom) {filters.rom = {$in :query.rom.split(',').map(n=>parseInt(r))} }
     if(query.gen) {filters.gen = {$in :query.gen.split(',').map(n=>parseInt(g))} }
     if(query.product) {filters.productName = {$regex: query.product, $options: 'i'} } //i vaneko case insensitive ho

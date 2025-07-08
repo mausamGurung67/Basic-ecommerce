@@ -52,7 +52,7 @@ const productSchema = new mongoose.Schema({
         defaul: 0
     }
 },{
-    timestamps: true
+    timestamps: true 
 
 });
 

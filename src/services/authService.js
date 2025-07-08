@@ -23,5 +23,26 @@ return await User.create({
 
 }
 
+
+const login = async (data)=>{
+
+    const doEmailExist = await User.find({
+        email:data.email
+    })
+
+    console.log("email donot exist")
+        if(!doEmailExist.length>0){
+            throw new Error("Invalid User")
+        }
+        console.log(doEmailExist)
+    const dbPassword = doEmailExist[0].password
+    const isPasswordMatched = bcrypt.compareSync(data.password,dbPassword)
+
+    if(isPasswordMatched){
+        return doEmailExist[0];
+    }else {
+        throw new Error("Invalid login")
+    }
+}
 export default {
-    register}
+    register, login}

@@ -33,4 +33,23 @@ const register = async (req,res)=>{
     }
 }
 
-export {register}
+
+const login = async (req,res) => {
+    try {
+        //login function
+        const {email,password} = req.body
+
+        if(!email || !password){throw new Error("Missing user credential")}
+
+        const data = await authService.login({email,password})
+        res.status(200).json({
+            message: "Login Successful",
+            data
+    })
+    } catch (error) {
+        console.log(error.message)
+        res.status(400).send(error.message)
+    }
+
+}
+export {register,login}
