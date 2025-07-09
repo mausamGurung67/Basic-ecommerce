@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import User from "../models/User.js"
+import { hashPassword } from "../utils/utility.js"
 
 
 const adminSeeder = async()=>{
@@ -8,9 +9,10 @@ const adminSeeder = async()=>{
         console.log("db is connected succefully")
         
         if(!adminFound){
-            User.create({
+            const password = hashPassword('admin')
+            await  User.create({
                 userName : "admin",
-                password: "admin",
+                password,
                 email: "admin@gmail.com",
                 phone: 9807373362,
                 role: "ADMIN"

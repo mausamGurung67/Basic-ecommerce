@@ -1,9 +1,11 @@
 import bcrypt from 'bcrypt';
 import user from '../models/User.js'; // Import the User model
 import User from '../models/User.js';
+import { hashPassword } from '../utils/utility.js';
+
 const register = async (data) => {
 
-const hashedPassword = bcrypt.hashSync(data.password,10)
+const hashedPassword = hashPassword(data.password);
 //const hash = '$2b$10$F2TTuPYiISZ58tWnjJdCqOYiOfUtsWFi9RCqm4TNboOTBJEHX371e' yo chai hashed password yesari store hunca vanera dekhako
 
 
