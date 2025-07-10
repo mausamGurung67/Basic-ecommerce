@@ -44,7 +44,7 @@ const login = async (req,res) => {
         if(!email || !password){throw new Error("Missing user credential")}
 
         const data = await authService.login({email,password})
-        const  payload = {
+        const payload = {
         id:data._id,
         userName:data.userName,
         role:data.role,

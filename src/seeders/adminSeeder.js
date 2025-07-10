@@ -5,7 +5,7 @@ import { hashPassword } from "../utils/utility.js"
 
 const adminSeeder = async()=>{
     try{
-        const adminFound = await mongoose.connect(process.env.MONGO_URI)
+        const adminFound = await User.findOne({email:'admin@gmail.com'});
         console.log("db is connected succefully")
         
         if(!adminFound){
