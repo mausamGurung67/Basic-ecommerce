@@ -2,6 +2,9 @@ import bcrypt from 'bcrypt';
 import user from '../models/User.js'; // Import the User model
 import User from '../models/User.js';
 import { hashPassword } from '../utils/utility.js';
+import { generateOTP } from '../utils/generateOTP.js';
+import { sendMail } from '../utils/sendMail.js';
+
 
 const register = async (data) => {
 
@@ -46,5 +49,18 @@ const login = async (data)=>{
         throw new Error("Invalid login")
     }
 }
+
+
+const forgotPassword = async(data)=>{
+   const userRegistered= await user.findOne({email:data.email})
+//so mail ma pathauna lai otp nodemailer install garne tespaxi sendmail utility ma code lekhne
+    if(!userRegistered){throw new Error("Invalid Request")}
+
+    const otp = generateOTP()
+
+    sendMail(data.email,otp)
+
+    return
+}
 export default {
-    register, login}
+    register, login, forgotPassword}
