@@ -65,4 +65,19 @@ const login = async (req,res) => {
     }
 
 }
-export {register,login}
+
+
+const forgotPassword = async (req,res) => {
+    
+    try {
+        const {email} = req.body
+        if(!email) {throw new Error("Email is required")}
+        const data = await authService.forgotPassword({email})
+    
+        res.status(200).json({message:"opt sent successfully"}) 
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({message: error.message});
+    }
+}
+export {register,login,forgotPassword}
