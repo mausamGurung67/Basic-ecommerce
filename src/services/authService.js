@@ -4,6 +4,7 @@ import User from '../models/User.js';
 import { hashPassword } from '../utils/utility.js';
 import { generateOTP } from '../utils/generateOTP.js';
 import { sendMail } from '../utils/sendMail.js';
+import Otp from '../models/Otp.js';
 
 
 const register = async (data) => {
@@ -58,9 +59,14 @@ const forgotPassword = async(data)=>{
 
     const otp = generateOTP()
 
+    const newOtp = await Otp.create({
+        email: data.email,
+        otp: otp,
+    })
+
     sendMail(data.email,otp)
 
-    return
+    res.send(newOtp)
 }
 export default {
     register, login, forgotPassword}
