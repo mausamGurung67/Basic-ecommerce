@@ -19,10 +19,25 @@ router.post ('/forgotPassword', async(req,res)=>{
 
         const otp = generateOTP();
 
-        const newOtp = await Otp.create({
+        const doesExist = await Otp.findOne({email})
+        
+        let newOtp;
+
+        if (!doesExist) {
+            newOtp = await Otp.create({
             email: email,
             otp: otp
-        });
+            });
+        } else {
+
+            newOtp = await Otp.findOneAndUpdate({email},{
+            otp: otp,
+            createdAt: new Date(),
+            },
+            {
+                new: true
+            })
+        }
 
         sendMail(email, otp);
         res.send(newOtp);
@@ -38,18 +53,21 @@ router.post("/verify-otp",async(req,res)=>{
     try{
         const {email,otp}=req.body;
 
-        const doesExit= await Otp.findOne({email:email});
+        const doesExist= await Otp.findOne({email:email});
 
-        if(!doesExit){
+        if(!doesExist){
             throw new Error("user does not exist");
         }
     
-        if (doesExit.otp !== otp){
-            throw new Error("otp did not match");
+        if (doesExist.otp !== otp){
+            throw new Error("Invalid Otp");
         } 
+         
+        await Otp.deleteOne({email});
        
         res.status(200).json({
-            message:"otp verified successfully"
+            message:"otp verified successfully",
+            data: doesExist,
         })
 
     }catch(error){
