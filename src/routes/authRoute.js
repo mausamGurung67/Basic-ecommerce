@@ -1,80 +1,45 @@
 import express from 'express'
-import { register, login, forgotPassword } from '../controllers/authController.js'
+import { register, login, forgotPassword, verifyOtp } from '../controllers/authController.js'
 import { generateOTP } from '../utils/generateOTP.js'
 import Otp from '../models/Otp.js'
 import { sendMail } from '../utils/sendMail.js'
+import User from '../models/User.js'
+
+import bcrypt from "bcrypt"
 
 const router = express.Router()
 
 router.post ('/register',register)
 router.post ('/login',login)
 // router.post ('/forgotPassword', forgotPassword)
-router.post ('/forgotPassword', async(req,res)=>{
+router.post ('/forgotPassword', forgotPassword)
+router.post("/verify-otp", verifyOtp)
+router.post("/reset-password", async(req,res) => {
     try{
-        const { email } = req.body;
-        console.log("email", email);
-        if(!email){
-            throw new Error("Email is required")
+        const {email, password} = req.body
+
+        if(!email || !password){
+            throw new Error("Email and password required");
         }
 
-        const otp = generateOTP();
+        const doesUserExist = await User.findOne({email});
 
-        const doesExist = await Otp.findOne({email})
+        if(!doesUserExist){
+            throw new Error("User not registered")
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10)
+        const data = await User.findOneAndUpdate({email}, {password: hashedPassword}, {new:true})
         
-        let newOtp;
-
-        if (!doesExist) {
-            newOtp = await Otp.create({
-            email: email,
-            otp: otp
-            });
-        } else {
-
-            newOtp = await Otp.findOneAndUpdate({email},{
-            otp: otp,
-            createdAt: new Date(),
-            },
-            {
-                new: true
-            })
-        }
-
-        sendMail(email, otp);
-        res.send(newOtp);
-    } catch (error){
-        console.log(error.message);
-        res.send(error.message);
-    }
-})
-
-
-router.post("/verify-otp",async(req,res)=>{
-
-    try{
-        const {email,otp}=req.body;
-
-        const doesExist= await Otp.findOne({email:email});
-
-        if(!doesExist){
-            throw new Error("user does not exist");
-        }
-    
-        if (doesExist.otp !== otp){
-            throw new Error("Invalid Otp");
-        } 
-         
-        await Otp.deleteOne({email});
-       
         res.status(200).json({
-            message:"otp verified successfully",
-            data: doesExist,
-        })
+            message:"Password changed successfully",
+            data,
+        });
 
-    }catch(error){
-        console.log(error.message);
+    } catch (error){
+        console.log(error.message) 
         res.send(error.message)
-        
-    }   
+    }
 })
 
 

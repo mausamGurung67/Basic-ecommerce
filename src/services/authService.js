@@ -1,72 +1,86 @@
 import bcrypt from 'bcrypt';
-import user from '../models/User.js'; // Import the User model
 import User from '../models/User.js';
 import { hashPassword } from '../utils/utility.js';
-import { generateOTP } from '../utils/generateOTP.js';
 import { sendMail } from '../utils/sendMail.js';
 import Otp from '../models/Otp.js';
+import { generateOTP } from '../utils/generateOTP.js';
 
 
 const register = async (data) => {
-
-const hashedPassword = hashPassword(data.password);
-//const hash = '$2b$10$F2TTuPYiISZ58tWnjJdCqOYiOfUtsWFi9RCqm4TNboOTBJEHX371e' yo chai hashed password yesari store hunca vanera dekhako
-
-
-const email = data.email
-const userExist = await user.find({email})
-
-if(userExist){
-    new Error("User already exists")
-}
-
-return await User.create({
-    email : data.email,
-    password : hashedPassword,
-    userName : data.userName,
-    phone : data.phone,
-})
-
-}
-
-
-const login = async (data)=>{
-
-    const doEmailExist = await User.find({
-        email:data.email
-    })
-
-    console.log("email donot exist")
-        if(!doEmailExist.length>0){
-            throw new Error("Invalid User")
-        }
-        console.log(doEmailExist)
-    const dbPassword = doEmailExist[0].password
-    const isPasswordMatched = bcrypt.compareSync(data.password,dbPassword)
-
-    if(isPasswordMatched){
-        return doEmailExist[0];
-    }else {
-        throw new Error("Invalid login")
+    const hashedPassword = hashPassword(data.password);
+    const email = data.email;
+    const userExist = await User.find({ email });
+    if (userExist.length > 0) {
+        throw new Error("User already exists");
     }
-}
-
-
-const forgotPassword = async(data)=>{
-   const userRegistered= await user.findOne({email:data.email})
-//so mail ma pathauna lai otp nodemailer install garne tespaxi sendmail utility ma code lekhne
-    if(!userRegistered){throw new Error("Invalid Request")}
-
-    const otp = generateOTP()
-
-    const newOtp = await Otp.create({
+    return await User.create({
         email: data.email,
-        otp: otp,
-    })
+        password: hashedPassword,
+        userName: data.userName,
+        phone: data.phone,
+    });
+};
 
-    sendMail(data.email,otp)
+const login = async (data) => {
+    const doEmailExist = await User.find({ email: data.email });
+    if (!doEmailExist.length > 0) {
+        throw new Error("Invalid User");
+    }
+    const dbPassword = doEmailExist[0].password;
+    const isPasswordMatched = bcrypt.compareSync(data.password, dbPassword);
+    if (isPasswordMatched) {
+        return doEmailExist[0];
+    } else {
+        throw new Error("Invalid login");
+    }
+};
 
-    res.send(newOtp)
-}
+const forgotPassword = async (data) => {
+
+    const isUserValid = await User.findOne({email: data.email});
+
+    if(!isUserValid) {
+        throw new Error("User is not registered")
+    }
+    const otp = generateOTP();
+    const doesExist = await Otp.findOne({ email: data.email });
+    let newOtp
+    if (!doesExist) {
+        newOtp = await Otp.create({
+            email: data.email,
+            otp: otp
+        });
+    } else {
+        newOtp = await Otp.findOneAndUpdate(
+            { email: data.email },
+            { otp: otp, 
+            createdAt: new Date() },
+            { new: true }
+        );
+    }
+    // sendMail(data.email, otp);
+    return newOtp;
+};
+
+const verifyOtp = async ({ email, otp }) => {
+  const doesExist = await Otp.findOne({ email });
+
+  if (!doesExist) {
+    throw new Error("Email doesn't exist");
+  }
+
+  if (doesExist.otp !== otp) {
+    throw new Error("Invalid OTP");
+  }
+
+  //optional
+  await Otp.deleteOne({ email });
+
+  return "Otp verified"
+};
 export default {
-    register, login, forgotPassword}
+    register,
+    login,
+    forgotPassword,
+    verifyOtp
+};
