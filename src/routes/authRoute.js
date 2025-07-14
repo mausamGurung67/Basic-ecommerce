@@ -4,7 +4,6 @@ import { generateOTP } from '../utils/generateOTP.js'
 import Otp from '../models/Otp.js'
 import { sendMail } from '../utils/sendMail.js'
 import User from '../models/User.js'
-
 import bcrypt from "bcrypt"
 
 const router = express.Router()
@@ -28,8 +27,15 @@ router.post("/reset-password", async(req,res) => {
             throw new Error("User not registered")
         }
 
+        if(!doesUserExist.canChangePassword){
+            throw new Error("Please verify OTP first")
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10)
-        const data = await User.findOneAndUpdate({email}, {password: hashedPassword}, {new:true})
+        const data = await User.findOneAndUpdate(
+            {email}, 
+            {password: hashedPassword, canChangePassword: false }, 
+            {new:true})
         
         res.status(200).json({
             message:"Password changed successfully",

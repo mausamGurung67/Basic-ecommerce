@@ -22,14 +22,14 @@ const register = async (data) => {
 };
 
 const login = async (data) => {
-    const doEmailExist = await User.find({ email: data.email });
-    if (!doEmailExist.length > 0) {
+    const doEmailExist = await User.findOne({ email: data.email });
+    if (!doEmailExist) {
         throw new Error("Invalid User");
     }
-    const dbPassword = doEmailExist[0].password;
+    const dbPassword = doEmailExist.password;
     const isPasswordMatched = bcrypt.compareSync(data.password, dbPassword);
     if (isPasswordMatched) {
-        return doEmailExist[0];
+        return doEmailExist;
     } else {
         throw new Error("Invalid login");
     }
@@ -73,6 +73,7 @@ const verifyOtp = async ({ email, otp }) => {
     throw new Error("Invalid OTP");
   }
 
+  await User.findOneAndUpdate({email}, {canChangePassword: true}, {new: true})
   //optional
   await Otp.deleteOne({ email });
 
