@@ -9,8 +9,8 @@ import { generateOTP } from '../utils/generateOTP.js';
 const register = async (data) => {
     const hashedPassword = hashPassword(data.password);
     const email = data.email;
-    const userExist = await User.find({ email });
-    if (userExist.length > 0) {
+    const userExist = await User.findOne({ email });
+    if (userExist) {
         throw new Error("User already exists");
     }
     return await User.create({
@@ -73,7 +73,11 @@ const verifyOtp = async ({ email, otp }) => {
     throw new Error("Invalid OTP");
   }
 
-  await User.findOneAndUpdate({email}, {canChangePassword: true}, {new: true})
+  await User.findOneAndUpdate(
+    {email}, 
+    {otpExpiresAt: new Date(Date.now() + 30 * 1000)}, 
+    {new: true}
+    );
   //optional
   await Otp.deleteOne({ email });
 

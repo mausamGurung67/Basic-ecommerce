@@ -28,14 +28,17 @@ router.post("/reset-password", async(req,res) => {
             throw new Error("User not registered")
         }
 
-        if(!doesUserExist.canChangePassword){
-            throw new Error("Please verify OTP first")
+        if(
+            !doesUserExist.otpExpiresAt ||
+            doesUserExist.otpExpiresAt < new Date() 
+        ) {
+            throw new Error("User cannot change password")
         }
 
         const hashedPassword = await bcrypt.hash(password, 10)
         const data = await User.findOneAndUpdate(
             {email}, 
-            {password: hashedPassword, canChangePassword: false }, 
+            {password: hashedPassword, otpExpiresAt: null}, 
             {new:true});
 
             res.clearCookie("userEmail");
@@ -50,6 +53,16 @@ router.post("/reset-password", async(req,res) => {
         res.send(error.message)
     }
 })
+
+router.get("/get-all-otps", async (req, res) => {
+  try {
+    const data = await Otp.find();
+    res.json({ message: "Otps fetched successfully", data });
+  } catch (error) {
+    console.log(error.message);
+    res.send(error.message);
+  }
+});
 
 
 export default router
