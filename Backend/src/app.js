@@ -5,6 +5,7 @@ import userRoute from './routes/userRoute.js';
 import productRoutes from './routes/productRoutes.js';
 import authRoutes from './routes/authRoute.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 
 configDotenv();
@@ -15,6 +16,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser())
 connectDb()
 
+app.use(cors())
 app.get('/',(req,res)=>{
     res.status(200).json({
         message : " get from app.js"
