@@ -7,7 +7,6 @@ const otpSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
-
     otp:{
         type: String,
         unique: true,
@@ -20,7 +19,6 @@ const otpSchema = new mongoose.Schema({
     },
 
 });
-
 
 const Otp = mongoose.model("Otp", otpSchema)
 
