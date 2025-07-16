@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Shield } from 'lucide-react';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -130,9 +131,9 @@ const handleSubmit = async (e) => {
             {/* Create Account Link */}
             <div className="text-center">
               <span className="text-gray-600">Don't have an account? </span>
-              <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
+              <Link to="/register" className="text-blue-600 hover:text-blue-500 font-medium">
                 Create one
-              </a>
+              </Link>
             </div>
           </div>
         </div>

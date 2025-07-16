@@ -161,7 +161,7 @@ const Register = () => {
                 value={phone}
                 onChange={(e) => {setPhone(e.target.value)}}
                 className="w-full px-3 py-3 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900"
-                placeholder="Enter your phone number (optional)"
+                placeholder="Enter your phone number"
               />
             </div>
 
