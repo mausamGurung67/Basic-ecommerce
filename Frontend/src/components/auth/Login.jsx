@@ -114,9 +114,9 @@ const handleSubmit = async (e) => {
                   Remember me
                 </label>
               </div>
-              <a href="#" className="text-sm text-blue-600 hover:text-blue-500">
+              <Link to="/otp-verify" className="text-sm text-blue-600 hover:text-blue-500">
                 Forgot Password?
-              </a>
+              </Link>
             </div>
 
             {/* Sign In Button */}

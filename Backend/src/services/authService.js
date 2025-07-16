@@ -58,7 +58,7 @@ const forgotPassword = async (data) => {
             { new: true }
         );
     }
-    // sendMail(data.email, otp);
+    sendMail(data.email, otp);
     return newOtp;
 };
 

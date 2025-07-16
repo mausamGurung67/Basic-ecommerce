@@ -1,18 +1,19 @@
 
 import nodemailer from 'nodemailer'
+import constant from '../cofig/constant.js';
 const sendMail = async (email,otp) =>{
 
 const transporter = nodemailer.createTransport({
 service: 'gmail',
     auth: {
-    user: "mausamgurung678@gmail.com",
-    pass: "yhsjslkjmijwhedq",
+    user: constant.EMAIL_USER,
+    pass: constant.EMAIL_PASS,
   },
 });
 
 const info = await transporter.sendMail({
-  from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
-  to: "khadkasandip9990@gmail.com",
+  from: `"Maddison Foo Koch" <${constant.EMAIL_USER}>`,
+  to: email,
   subject: "Your OTP Code for Verification",
   text: `Your OTP code is: ${otp}`, // plain-text fallback
   html: `

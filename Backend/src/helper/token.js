@@ -1,9 +1,10 @@
 
 import jwt from 'jsonwebtoken'
+import constant from '../cofig/constant.js';
 export const createToken = (payload)=>{
-    return jwt.sign(payload,process.env.JWT_SECRET);
+    return jwt.sign(payload,constant.JWT_SECRET);
 }
 
 export const verifyToken = (token) =>{
-     return jwt.verify(token,process.env.JWT_SECRET);
+     return jwt.verify(token,constant.JWT_SECRET);
 }

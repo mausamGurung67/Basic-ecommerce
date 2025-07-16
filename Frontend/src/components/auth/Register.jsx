@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   const [userName, setUserName] = useState('')
@@ -177,9 +178,9 @@ const Register = () => {
             {/* Sign In Link */}
             <div className="text-center">
               <span className="text-gray-600">Already have an account? </span>
-              <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
+              <Link to="/login" className="text-blue-600 hover:text-blue-500 font-medium">
                 Sign in
-              </a>
+              </Link>
             </div>
           </div>
         </div>
