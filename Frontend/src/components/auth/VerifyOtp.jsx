@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mail, X } from 'lucide-react';
 
-const OTPVerification=() => {
+const VerifyOtp=() => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const inputRefs = useRef([]);
@@ -139,4 +139,4 @@ const OTPVerification=() => {
   );
 };
 
-export default OTPVerification;
+export default VerifyOtp;

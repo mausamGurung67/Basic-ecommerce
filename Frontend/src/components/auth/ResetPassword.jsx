@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, X, Eye, EyeOff } from 'lucide-react';
 
-export default function ResetPasswordModal() {
+const ResetPassword=() => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -147,3 +147,5 @@ export default function ResetPasswordModal() {
     </div>
   );
 }
+
+export default ResetPassword;
