@@ -7,9 +7,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import constant from './cofig/constant.js';
 
-
-
-
 const app =  express();
 
 app.use(express.json());
@@ -17,8 +14,9 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser())
 connectDb()
 
-app.use(cors({
-    origin:"",
+app.use(
+cors({
+    origin:"http:/localhost:5173",
     credentials: true
 }))
 app.get('/',(req,res)=>{

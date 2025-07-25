@@ -32,14 +32,18 @@ const Register = () => {
       phone
       })
 
-      if (res.status == 200){
+      if (res.status == 201){
         alert("User registered successfully")
         navigate('/login')
+      }else{
+        alert("User registration failed")
       }
       console.log(res)
     }
     doRegister()
   };
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">

@@ -64,5 +64,30 @@ router.get("/get-all-otps", async (req, res) => {
   }
 });
 
+router.get("/verify/:step", async(req,res) => {
+
+try{
+    const {step} = req.params;
+
+    if(step ==="1"){
+
+    }
+
+    if(step ==="2"){
+
+    }
+
+    if(step ==="3"){
+
+    }
+
+    res.status(200).json({message: `Verification step ${step} passed` })
+} catch (error) {
+    console.log(error);
+    res.status(400).json({error: error.message});
+}
+
+})
+
 
 export default router
