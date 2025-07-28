@@ -1,9 +1,14 @@
 import productService from "../services/productService.js";
 
 const createProduct = async (req, res) => {
-  try {
-    const product = req.body;
 
+  console.log(req.file);
+
+  return res.send(req.file);
+
+  const product = req.body;
+
+  try {
     if (!product) {
       return res.status(400).send("Product data is required");
     }

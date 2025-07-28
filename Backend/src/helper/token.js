@@ -1,4 +1,3 @@
-
 import jwt from 'jsonwebtoken'
 import constant from '../cofig/constant.js';
 export const createToken = (payload)=>{
