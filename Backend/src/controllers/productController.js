@@ -2,11 +2,20 @@ import productService from "../services/productService.js";
 
 const createProduct = async (req, res) => {
 
+  if (!req.file) {
+    return res.status(400).send("Image file is required");
+  }
   console.log(req.file);
 
-  return res.send(req.file);
+  const filepath = req.file.path;
+  const filename = req.file.filename;
+
+
 
   const product = req.body;
+
+  product.imageUrl = filepath;
+  product.imageName = filename;
 
   try {
     if (!product) {
