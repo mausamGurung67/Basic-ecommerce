@@ -16,7 +16,7 @@ router.post("/createProduct",upload.single('image'),createProduct);
 router.get("/getAllProducts", getAllProducts);
 router.get("/getProductById/:id", getProductById);
 router.delete("/deleteProductById/:id",deleteProductById);
-router.put("/updateProductById/:id",isLoggedIn,isAdmin,updateProductById);
+router.put("/updateProductById/:id",upload.single('image'),updateProductById);
 
 
 //isLoggedIn,isAdmin,

@@ -87,10 +87,23 @@ const deleteProductById = async (req, res) => {
 
 const updateProductById = async (req, res) => {
   try {
+
+    if (req.file) {
+
+      console.log(req.file);
+      const newfilepath = req.file.path;
+      const newfilename = req.file.filename;
+      req.body.imageName = newfilename;
+      req.body.imageUrl = newfilepath;
+
+    }
+
+
     const productId = req.params.id;
     const product = req.body;
 
     const data = await productService.updateProductById(product, productId);
+
     res.status(200).json({
       message: "Product updated successfully",
       data,

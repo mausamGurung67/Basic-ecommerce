@@ -42,9 +42,14 @@ const deleteProductById = async (id) => {
 };
 
 const updateProductById = async (data,id) => {
+    const product = await Product.findById(id);
 
-    
-    return await Product.findByIdAndUpdate(id, data);
+    if (data.imageName){
+        const oldImageName = product.imageName;
+        await cloudinary.uploader.destroy(oldImageName);
+    }
+
+    return await Product.findByIdAndUpdate(id, data, { new: true});
 }
 
 export default {
