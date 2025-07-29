@@ -1,7 +1,8 @@
+import { cloudinary } from '../cofig/cloudinary.js';
 import Product from '../models/Product.js'; //filter haruko kam vaneko maximum sabai services ma use garna 
 const createProduct = async (data) => {
     return await Product.create(data);
-};
+}; 
 
 //map ko kam vaneko array lai arko array ma convert garne ho
 
@@ -29,10 +30,20 @@ const getProductById = async (id) => {
 };
 
 const deleteProductById = async (id) => {
-    return await Product.findByIdAndDelete(id);
+    const product = await Product.findOne({_id: id});
+    const imageName = product.imageName;
+    console.log(imageName);
+
+    const deletedImage = await cloudinary.uploader.destroy(imageName)
+    console.log(deletedImage);
+    return product;
+
+    return await Product.deleteOne({_id: id});
 };
 
 const updateProductById = async (data,id) => {
+
+    
     return await Product.findByIdAndUpdate(id, data);
 }
 
