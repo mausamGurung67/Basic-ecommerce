@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoute.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import constant from './cofig/constant.js';
+import orderRoutes from './routes/orderRoute.js';
 
 const app =  express();
 
@@ -29,6 +30,7 @@ app.get('/',(req,res)=>{
 app.use('/api/user',userRoute )
 app.use("/api/product",productRoutes)
 app.use("/api/auth",authRoutes)
+app.use('/api/order',orderRoutes)
 
 
 

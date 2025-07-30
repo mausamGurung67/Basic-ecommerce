@@ -1,59 +1,48 @@
-import mongoose from "mongoose";
-import {v4 as uuidv4} from 'uuid';
-import Product from "./Product";
-
-
+import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 const orderSchema = new mongoose.Schema({
-
     user : {
-        type: mongoose.Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.ObjectId,
         ref : "User",
-        required: true
+        required : true
     },
-
-    oderNumber : {
-        type: String,
-        default: ()=>uuidv4()
+    orderNumber : {
+        type : String,
+        default : ()=>uuidv4()
     },
-
-    cartItem : {
-        type : [    
+    cartItems :{
+        type :[
             {
-                product : {type : mongoose.Schema.Types.ObjectId, ref : "Product", required: true},
-                quantity : {type : Number, default: 1}
+                product : {type : mongoose.Schema.Types.ObjectId,ref :'Product'},
+                quantity : {type : Number, default : 1}
+
+
             }
         ]
-    }, 
-
+    },
     location : {
-        type : string,
-        required : true
-    },
-
-    phone : {
-        type : String, 
-        required : true
-    },
-
-    orderStatus : {
         type : String,
-        enum : ["pending", "confirmed", "delivering", "delivered", "cancelled"],
-        default : "pending"
+        required : true
     },
-
+    phone : {
+        type : String
+    },
+    orderStatus :{
+        type : String,
+        enum : ['pending','confirmed','shipping','delivered','cancelled']
+    },
     paymentStatus : {
         type : String,
-        enum : ["pending", "paid", "failed"],
-        default : "pending"
+        enum : ['paid','notPaid'],
+        default : 'notPaid'
     },
-
-    paymentMethod : {
+    paymentMethod :{
         type : String,
-        enum : ["cod", "online"],
-        default : "cod"
+        enum : ['cod','khalti']
     }
+
 })
-const Order = mongoose.model('order', orderSchema)
+const Order = mongoose.model ('Order',orderSchema)
 
 export default Order;
