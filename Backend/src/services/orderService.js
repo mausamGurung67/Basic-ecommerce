@@ -9,9 +9,25 @@ const getOrderById = async (id) => {
     return await Order.findById(id)
 }
 
-const getOrderByUser = async (userId) => {
-    return await Order.find({ userId: userId });
+const getOrderByUserId = async (userId) => {
+   const data = await Order.find({ user: userId });
+    console.log(data)
 }
 
+const updateOrderStatus = async (id, status) => {
+    await Order.findByIdAndUpdate(
+        id,
+        { orderStatus: status },
+        { new: true }
+    );
+}
 
-export default { createOrder, getOrderById, getOrderByUser };
+const updatePaymentStatus = async (id, Status) => {
+    await Order.findByIdAndUpdate(
+        id,
+        { paymentStatus: Status },
+        { new: true }
+    );
+}
+
+export default { createOrder, getOrderById, getOrderByUserId, updateOrderStatus, updatePaymentStatus };
