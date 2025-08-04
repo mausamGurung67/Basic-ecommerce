@@ -1,4 +1,6 @@
+import constant from "../cofig/constant.js";
 import orderService from "../services/orderService.js";
+import axios from "axios";
 
 
 const createOrder = async (req, res) => {
@@ -10,6 +12,30 @@ const createOrder = async (req, res) => {
         console.log("User ID:", userId);
         const orderData = req.body;
         orderData.user = userId; // Add user ID to order data
+
+        if(orderData.paymentMethod==="KHALTI"){
+
+          const totalAmount = orderData.totalAmount
+
+          const options = {
+              "return_url": "http://localhost:5173/dashboard",
+              "website_url": "http://localhost:5173",
+              "amount": totalAmount * 100, 
+              "purchase_order_id": Date.now(),
+              "purchase_order_name": `order-${Date.now()}`,
+          }
+
+          const result = await axios.post("https://dev.khalti.com/api/v2/epayment/initiate/", options,{
+            headers: {
+              'Authorization': `Key ${constant.KHALTI_SECRET_KEY}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+
+        console.log(result.data);
+        return res.status(200).send(result.data);
+        }
     
         const data = await orderService.createOrder(orderData);
 
