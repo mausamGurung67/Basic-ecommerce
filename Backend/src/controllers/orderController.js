@@ -11,7 +11,7 @@ const createOrder = async (req, res) => {
 
         console.log("User ID:", userId);
         const orderData = req.body;
-        orderData.user = userId; // Add user ID to order data
+        orderData.user = userId; 
 
         if(orderData.paymentMethod==="KHALTI"){
 
@@ -24,7 +24,7 @@ const createOrder = async (req, res) => {
               "purchase_order_id": Date.now(),
               "purchase_order_name": `order-${Date.now()}`,
           }
-x
+
           const result = await axios.post("https://dev.khalti.com/api/v2/epayment/initiate/", options,{
             headers: {
               'Authorization': `Key ${constant.KHALTI_SECRET_KEY}`,
@@ -33,8 +33,21 @@ x
           }
         )
 
+         if (result.data.pidx) {
+        orderData.pidx = result.data.pidx;
+
+        const khaltiResult = await orderService.createOrder(orderData);
+
+        khaltiResult.paymentUrl = result.data.payment_url;
+
         console.log(result.data);
-        return res.status(200).send(result.data);
+        return res.status(200).json({
+          data: khaltiResult,
+          payment_url: result.data.payment_url,
+        });
+      } else {
+        throw new Error("Khalti payment initiate failed.!");
+      }
         }
     
         const data = await orderService.createOrder(orderData);
@@ -49,6 +62,7 @@ x
         console.log(error.message);
         res.status(500).send("Error occurred while creating order");
     }
+
 
 };
 
@@ -127,7 +141,7 @@ const updateKhaltiPaymentStatus = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.status(400).send("Failed to update Payment Status");
-  }
+  }
 };
 
 
