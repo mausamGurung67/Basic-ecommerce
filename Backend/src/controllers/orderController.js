@@ -24,7 +24,7 @@ const createOrder = async (req, res) => {
               "purchase_order_id": Date.now(),
               "purchase_order_name": `order-${Date.now()}`,
           }
-
+x
           const result = await axios.post("https://dev.khalti.com/api/v2/epayment/initiate/", options,{
             headers: {
               'Authorization': `Key ${constant.KHALTI_SECRET_KEY}`,
@@ -118,4 +118,17 @@ const updatePaymentStatus = async (req, res) => {
 };
 
 
-export { createOrder, getOrderById, getOrderByUserId, updateOrderStatus, updatePaymentStatus}
+const updateKhaltiPaymentStatus = async (req, res) => {
+  try {
+    const { pidx, totalAmount } = req.body;
+    const userId = req.user.id;
+    const data = await orderService.updateKhaltiPaymentStatus(pidx, totalAmount, userId);
+    res.status(200).send("Update payment Status");
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).send("Failed to update Payment Status");
+  }
+};
+
+
+export { createOrder, getOrderById, getOrderByUserId, updateOrderStatus, updatePaymentStatus, updateKhaltiPaymentStatus}
