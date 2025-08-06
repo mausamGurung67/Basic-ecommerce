@@ -7,9 +7,12 @@ import { generateOTP } from '../utils/generateOTP.js';
 
 
 const register = async (data) => {
-    const hashedPassword = hashPassword(data.password);
+    const hashedPassword = hashPassword(data.password, 10);
+    //console.log(hashedPassword);
     const email = data.email;
     const userExist = await User.findOne({ email });
+    console.log(userExist);
+
     if (userExist) {
         throw new Error("User already exists");
     }
@@ -27,7 +30,8 @@ const login = async (data) => {
         throw new Error("Invalid User");
     }
     const dbPassword = doEmailExist.password;
-    const isPasswordMatched = bcrypt.compareSync(data.password, dbPassword);
+    console.log(data);
+    const isPasswordMatched = await bcrypt.compare(data.password, dbPassword);
     if (isPasswordMatched) {
         return doEmailExist;
     } else {

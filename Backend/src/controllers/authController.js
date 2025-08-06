@@ -1,8 +1,5 @@
 import { createToken } from "../helper/token.js";
-import Otp from "../models/Otp.js";
 import authService from "../services/authService.js";
-import jwt from "jsonwebtoken";
-import { generateOTP } from "../utils/generateOTP.js";
 
 const register = async (req,res)=>{
 
@@ -17,22 +14,24 @@ const register = async (req,res)=>{
     if(password !== confirmPassword){
         return res.status(400).json({message: "password did not match"})
     }
+
     const data = await authService.register({
-        email,
-        phone,
-        password,
-        userName
+        email: email,
+        phone: phone,
+        password: password,
+        userName: userName,
     })
 
     res.status(200).json({
         message: "User registered successfully",
-        data
+        data,
     })
         
     } catch (error) {
         console.log(error.message);
-        res.send(500).json({
-            message: "Internal server error", error: error.message
+        res.status(500).json({
+            message: "Internal server error", 
+            error: error.message,
         })
     }
 }
@@ -47,7 +46,7 @@ const login = async (req,res) => {
             throw new Error("Missing user credential")
         }
 
-        const data = await authService.login({email,password})
+        const data = await authService.login({email,password});
         
         const payload = {
         id:data._id,
@@ -58,30 +57,38 @@ const login = async (req,res) => {
    }
 
     const token = createToken(payload);
-    res.cookie('authToken',token)
+    res.cookie('authToken',token);
+
     res.status(200).json({
         message: "Login Successful",
         data,
-        token
-})
+        token,
+    });
     } catch (error) {
         console.log(error.message)
         res.status(400).send(error.message)
     }
-
-}
+};
 
 
 const forgotPassword = async(req,res)=>{
     try{
         const { email } = req.body;
        
-        res.cookie("userEmail", email)
+        res.cookie("userEmail", email, {
+            maxAge: 5 * 60 * 1000, 
+            httpOnly: true,
+        });
+
         if(!email){
             throw new Error("Email is required")
         }
+
         const data = await authService.forgotPassword({email})
-        const otp = generateOTP();  //
+        res.send({
+            message: "Otp sent to your email",
+            data,
+        });
         res.send(data);
     } catch (error){
         console.log(error.message);
@@ -94,6 +101,12 @@ const verifyOtp = async (req, res) => {
     const { otp } = req.body;
     const email = req.cookies.userEmail;
 
+    console.log(email);
+
+    if (!email || !otp) {
+      throw new Error("Email and OTP are required");  
+    }
+
     const data = await authService.verifyOtp({ email, otp });
     res.status(200).json({ data });
   } catch (error) {
@@ -102,4 +115,4 @@ const verifyOtp = async (req, res) => {
   }
 };
 
-export {register,login,forgotPassword,verifyOtp}
+export { register, login, forgotPassword, verifyOtp}

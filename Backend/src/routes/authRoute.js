@@ -1,8 +1,6 @@
 import express from 'express'
 import { register, login, forgotPassword, verifyOtp } from '../controllers/authController.js'
-import { generateOTP } from '../utils/generateOTP.js'
 import Otp from '../models/Otp.js'
-import { sendMail } from '../utils/sendMail.js'
 import User from '../models/User.js'
 import bcrypt from "bcrypt"
 import { verifyToken } from '../helper/token.js'
