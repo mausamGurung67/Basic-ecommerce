@@ -6,7 +6,9 @@ const isLoggedIn = (req,res,next)=>{
     try {  
         const token = req.cookies.authToken
 
-        if(!token) throw new Error('User not logged in')
+        if(!token) {
+            throw new Error('User not logged in')
+        }
 
         console.log(token)
 
