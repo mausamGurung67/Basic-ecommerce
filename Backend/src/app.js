@@ -26,6 +26,26 @@ app.get('/',(req,res)=>{
     })
 })
 
+app.get("/test", (req, res) => {
+  res.cookie("name", "name", {
+    maxAge: 10 * 60 * 1000,
+    httpOnly: true,
+  });
+  res
+    .status(200)
+    .send(
+      "<b><a style='color: white; background: black; padding: 2px'>Hello</a>, Welcome to my app!</b>"
+    );
+});
+
+app.get("/api/clear-cookie", (req, res ) => {
+    res.clearCookie("name", {
+        maxAge: 10 * 60 * 1000, // 10 minutes
+        httpOnly: true,
+    });
+    res.status(200).json({ message: "Cookie cleared" });
+});
+
 
 app.use('/api/user',userRoute )
 app.use("/api/product",productRoutes)

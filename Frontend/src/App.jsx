@@ -7,6 +7,7 @@ import ForgotPassword from './components/auth/ForgotPassword'
 import Navbar from './components/common/Navbar'
 import Home from './components/auth/Home'
 import ResetPassword from './components/auth/ResetPassword'
+import Dashboard from './pages/admin/Dashboard'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
         <Route path="/Home" element={<Home/>}/>
         <Route path="/reset-password" element={<ResetPassword/>}/>
+        <Route path="/admin-dashboard" element={<Dashboard/>}/>
       </Routes>
       </BrowserRouter>
     </>
